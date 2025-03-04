@@ -7,50 +7,52 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* styles.css */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: url(cp.jpg) no-repeat center center/cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    backdrop-filter: blur(5px);
-}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url(cp.jpg) no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            backdrop-filter: blur(5px);
+        }
 
-.form-container {
-    background: transparent; /* Makes the registration form background invisible */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: none;
-}
-#registerForm{
-    
-    width: 350px;
-}
+        .form-container {
+            background: transparent; /* Makes the registration form background invisible */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: none;
+        }
 
-
+        #registerForm {
+            width: 350px;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h1 class="text-4xl font-bold text-center mb-10">Registration Form</h1>
         <form id="registerForm">
-            <label class=" text-1xl block mb-2 font-bold text-center">Name</label>
-            <input type="text" id="name" class="w-full p-2 border rounded mb-4" placeholder="enter your name">
+            <label class="text-1xl block mb-2 font-bold text-center">Name</label>
+            <input type="text" id="name" class="w-full p-2 border rounded mb-4" placeholder="Enter your name">
             
             <label class="text-1xl block mb-2 font-bold text-center">Email</label>
-            <input type="email" id="email" class="w-full p-2 border rounded mb-4" placeholder="enter your email id">
+            <input type="email" id="email" class="w-full p-2 border rounded mb-4" placeholder="Enter your email id">
             
             <label class="text-1xl block mb-2 font-bold text-center">Password</label>
-            <input type="password" id="password" class="w-full p-2 border rounded mb-4" placeholder="enter your password">
+            <input type="password" id="password" class="w-full p-2 border rounded mb-4" placeholder="Enter your password">
             
             <label class="text-1xl block mb-2 font-bold text-center">Confirm Password</label>
-            <input type="password" id="confirmPassword" class="w-full p-2 border rounded mb-4" placeholder="enter Confirm password">
-            <div class="flex justify-center w-full"><button type="submit" class=" bg-blue-600 text-white p-2 rounded w-1/2">Register</button>
+            <input type="password" id="confirmPassword" class="w-full p-2 border rounded mb-4" placeholder="Enter confirm password">
+            
+            <p style="text-align: center;"><a href="login.html" class="text-blue-600 underline">Login</a></p><br>
+            
+            <div class="flex justify-center w-full">
+                <button type="submit" class="bg-blue-600 text-white p-2 rounded w-1/2">Register</button>
             </div>
-            </form>
+        </form>
         <p id="errorMessage" class="text-red-500 text-center mt-3"></p>
     </div>
     

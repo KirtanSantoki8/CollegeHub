@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Home - CollegeHub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .form-popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ccc;
+            z-index: 9;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 400px; /* Set a fixed width for the form */
+        }
+
+        .form-popup h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-popup select, .form-popup input {
+            margin: 10px 0;
+            padding: 10px;
+            width: calc(100% - 20px); /* Adjust width to fit within the form */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-popup .form-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-popup button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 48%; /* Adjust width to fit within the form */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-popup button:hover {
+            background-color: #45a049;
+        }
+
+        .add-department-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .add-department-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-department-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Menu -->
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="nav-item">Information Technology</li>
+            <li class="nav-item dropdown">
+                <a href="#">Computer Engineering</a>
+                <ul class="dropdown-menu" id="computer-engineering-menu">
+                    <li><a href="subject-details.html">Subject 1</a></li>
+                    <li><a href="subject-details.html">Subject 2</a></li>
+                    <!-- Add more subjects as needed -->
+                </ul>
+            </li>
+            <li class="nav-item">Artificial Intelligence</li>
+        </ul>
+    </nav>
+
+    <!-- Add New Department Button -->
+    <div class="add-department-container">
+        <button class="add-department-btn" onclick="openForm()">Add New Department</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="overlay"></div>
+        <div class="content">
+            <!-- Content goes here -->
+        </div>
+    </section>
+
+    <!-- Form Popup -->
+    <div class="form-popup" id="addDepartmentForm">
+        <h2>Add New Department</h2>
+        <form id="departmentForm">
+            <select id="departmentDropdown" required>
+                <option value="">Select Department</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+            <select id="semesterDropdown" required>
+                <option value="">Select Semester</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+            <input type="text" id="subjectName" placeholder="Subject Name" required>
+            <div class="form-buttons">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="closeForm()">Close</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function openForm() {
+            document.getElementById("addDepartmentForm").style.display = "block";
+            fetchDepartments();
+            fetchSemesters();
+        }
+
+        function closeForm() {
+            document.getElementById("addDepartmentForm").style.display = "none";
+        }
+
+        function fetchDepartments() {
+            fetch('/get-departments')
+                .then(response => response.json())
+                .then(data => {
+                    const departmentDropdown = document.getElementById('departmentDropdown');
+                    departmentDropdown.innerHTML = '<option value="">Select Department</option>';
+                    data.departments.forEach(department => {
+                        const option = document.createElement('option');
+                        option.value = department.id;
+                        option.textContent = department.name;
+                        departmentDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching departments:', error));
+        }
+
+        function fetchSemesters() {
+            fetch('/get-semesters')
+                .then(response => response.json())
+                .then(data => {
+                    const semesterDropdown = document.getElementById('semesterDropdown');
+                    semesterDropdown.innerHTML = '<option value="">Select Semester</option>';
+                    data.semesters.forEach(semester => {
+                        const option = document.createElement('option');
+                        option.value = semester.id;
+                        option.textContent = semester.name;
+                        semesterDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching semesters:', error));
+        }
+
+        document.getElementById('departmentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            let departmentId = document.getElementById('departmentDropdown').value;
+            let semesterId = document.getElementById('semesterDropdown').value;
+            let subjectName = document.getElementById('subjectName').value;
+
+            // Execute the query to add department, semester, and subject to the database
+            fetch('/add-department', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    departmentId: departmentId,
+                    semesterId: semesterId,
+                    subjectName: subjectName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Department added successfully!');
+                    closeForm();
+                } else {
+                    alert('Error adding department.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding department.');
+            });
+        });
+    </script>
+
+</body>
+</html>

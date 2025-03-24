@@ -97,6 +97,8 @@
     <div class="button-container">
         <button onclick="openAddDepartmentForm()">Add New Department</button>
         <button onclick="openAllocateSubjectForm()">Allocate Subject</button>
+        <button onclick="openAddStudentForm()">Add Student</button>
+        <button onclick="openAddTeacherForm()">Add Teacher</button>
     </div>
 
     <!-- Hero Section -->
@@ -140,6 +142,32 @@
         </form>
     </div>
 
+    <!-- Add Student Form Popup -->
+    <div class="form-popup" id="addStudentForm">
+        <h2>Add Student</h2>
+        <form id="studentForm">
+            <input type="text" id="studentEnrollment" placeholder="Student Enrollment Number" required>
+            <input type="password" id="studentPassword" placeholder="Password" required>
+            <div class="form-buttons">
+                <button type="submit">Register</button>
+                <button type="button" onclick="closeForm('addStudentForm')">Close</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Add Teacher Form Popup -->
+    <div class="form-popup" id="addTeacherForm">
+        <h2>Add Teacher</h2>
+        <form id="teacherForm">
+            <input type="text" id="teacherName" placeholder="Teacher Name" required>
+            <input type="password" id="teacherPassword" placeholder="Password" required>
+            <div class="form-buttons">
+                <button type="submit">Register</button>
+                <button type="button" onclick="closeForm('addTeacherForm')">Close</button>
+            </div>
+        </form>
+    </div>
+
     <script>
         function openAddDepartmentForm() {
             document.getElementById("addDepartmentForm").style.display = "block";
@@ -149,6 +177,14 @@
             document.getElementById("allocateSubjectForm").style.display = "block";
             fetchTeachers();
             fetchSubjects();
+        }
+
+        function openAddStudentForm() {
+            document.getElementById("addStudentForm").style.display = "block";
+        }
+
+        function openAddTeacherForm() {
+            document.getElementById("addTeacherForm").style.display = "block";
         }
 
         function closeForm(formId) {
@@ -187,40 +223,6 @@
                 .catch(error => console.error('Error fetching subjects:', error));
         }
 
-        document.getElementById('departmentForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            let departmentName = document.getElementById('departmentName').value;
-            let semesterName = document.getElementById('semesterName').value;
-            let subjectName = document.getElementById('subjectName').value;
-
-            // Execute the query to add department, semester, and subject to the database
-            fetch('/add-department', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    departmentName: departmentName,
-                    semesterName: semesterName,
-                    subjectName: subjectName
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Department added successfully!');
-                    closeForm('addDepartmentForm');
-                } else {
-                    alert('Error adding department.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error adding department.');
-            });
-        });
-
         document.getElementById('allocateForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
@@ -250,6 +252,38 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error allocating subject.');
+            });
+        });
+
+        document.getElementById('teacherForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            let teacherName = document.getElementById('teacherName').value;
+            let teacherPassword = document.getElementById('teacherPassword').value;
+
+            // Execute the query to add teacher to the database
+            fetch('/add-teacher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: teacherName,
+                    password: teacherPassword
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Teacher added successfully!');
+                    closeForm('addTeacherForm');
+                } else {
+                    alert('Error adding teacher.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding teacher.');
             });
         });
     </script>

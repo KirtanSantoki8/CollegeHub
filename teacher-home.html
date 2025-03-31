@@ -95,7 +95,6 @@
 
     <!-- Add New Department Button -->
     <div class="add-department-container">
-        <button class="add-department-btn" onclick="openForm()">Add New Subject</button>
         <button class="add-department-btn" onclick="openAddMaterialForm()">Add Material</button>
     </div>
 
@@ -106,26 +105,6 @@
             <!-- Content goes here -->
         </div>
     </section>
-
-    <!-- Form Popup -->
-    <div class="form-popup" id="addDepartmentForm">
-        <h2>Add New Department</h2>
-        <form id="departmentForm">
-            <select id="departmentDropdown" required>
-                <option value="">Select Department</option>
-                <!-- Options will be populated dynamically -->
-            </select>
-            <select id="semesterDropdown" required>
-                <option value="">Select Semester</option>
-                <!-- Options will be populated dynamically -->
-            </select>
-            <input type="text" id="subjectName" placeholder="Subject Name" required>
-            <div class="form-buttons">
-                <button type="submit">Submit</button>
-                <button type="button" onclick="closeForm()">Close</button>
-            </div>
-        </form>
-    </div>
 
     <!-- Add Material Form Popup -->
     <div class="form-popup" id="addMaterialForm">
@@ -144,11 +123,6 @@
     </div>
 
     <script>
-        function openForm() {
-            document.getElementById("addDepartmentForm").style.display = "block";
-            fetchDepartments();
-            fetchSemesters();
-        }
 
         function openAddMaterialForm() {
             document.getElementById("addMaterialForm").style.display = "block";
@@ -157,38 +131,6 @@
 
         function closeForm(formId) {
             document.getElementById(formId).style.display = "none";
-        }
-
-        function fetchDepartments() {
-            fetch('/get-departments')
-                .then(response => response.json())
-                .then(data => {
-                    const departmentDropdown = document.getElementById('departmentDropdown');
-                    departmentDropdown.innerHTML = '<option value="">Select Department</option>';
-                    data.departments.forEach(department => {
-                        const option = document.createElement('option');
-                        option.value = department.id;
-                        option.textContent = department.name;
-                        departmentDropdown.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching departments:', error));
-        }
-
-        function fetchSemesters() {
-            fetch('/get-semesters')
-                .then(response => response.json())
-                .then(data => {
-                    const semesterDropdown = document.getElementById('semesterDropdown');
-                    semesterDropdown.innerHTML = '<option value="">Select Semester</option>';
-                    data.semesters.forEach(semester => {
-                        const option = document.createElement('option');
-                        option.value = semester.id;
-                        option.textContent = semester.name;
-                        semesterDropdown.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching semesters:', error));
         }
 
         function fetchAllocatedSubjects() {
@@ -206,40 +148,6 @@
                 })
                 .catch(error => console.error('Error fetching subjects:', error));
         }
-
-        document.getElementById('departmentForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            let departmentId = document.getElementById('departmentDropdown').value;
-            let semesterId = document.getElementById('semesterDropdown').value;
-            let subjectName = document.getElementById('subjectName').value;
-
-            // Execute the query to add department, semester, and subject to the database
-            fetch('/add-department', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    departmentId: departmentId,
-                    semesterId: semesterId,
-                    subjectName: subjectName
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Department added successfully!');
-                    closeForm('addDepartmentForm');
-                } else {
-                    alert('Error adding department.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error adding department.');
-            });
-        });
 
         document.getElementById('materialForm').addEventListener('submit', function(event) {
             event.preventDefault();

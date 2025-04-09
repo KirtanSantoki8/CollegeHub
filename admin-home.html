@@ -18,7 +18,7 @@
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            width: 400px; /* Set a fixed width for the form */
+            width: 400px;
         }
 
         .form-popup h2 {
@@ -29,7 +29,7 @@
         .form-popup select, .form-popup input {
             margin: 10px 0;
             padding: 10px;
-            width: calc(100% - 20px); /* Adjust width to fit within the form */
+            width: calc(100% - 20px);
             border: 1px solid #ccc;
             border-radius: 4px;
         }
@@ -42,7 +42,7 @@
         .form-popup button {
             margin: 10px 0;
             padding: 10px;
-            width: 48%; /* Adjust width to fit within the form */
+            width: 48%;
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -86,7 +86,6 @@
                 <ul class="dropdown-menu" id="computer-engineering-menu">
                     <li><a href="subject-details.html">Subject 1</a></li>
                     <li><a href="subject-details.html">Subject 2</a></li>
-                    <!-- Add more subjects as needed -->
                 </ul>
             </li>
             <li class="nav-item">Artificial Intelligence</li>
@@ -96,6 +95,8 @@
     <!-- Button Container -->
     <div class="button-container">
         <button onclick="openAddDepartmentForm()">Add New Department</button>
+        <button onclick="openAddSemesterForm()">Add Semester</button>
+        <button onclick="openAddSubjectForm()">Add Subject</button>
         <button onclick="openAllocateSubjectForm()">Allocate Subject</button>
         <button onclick="openAddStudentForm()">Add Student</button>
         <button onclick="openAddTeacherForm()">Add Teacher</button>
@@ -113,8 +114,47 @@
     <div class="form-popup" id="addDepartmentForm">
         <h2>Add New Department</h2>
         <form id="departmentForm">
-            <input type="text" id="departmentName" placeholder="Department Name" required>
-            <select id="semesterDropdown" required>
+            <input type="text" id="departmentName" placeholder="Enter Department Name" required>
+            <div class="form-buttons">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="closeForm('addDepartmentForm')">Close</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Add Semester Form Popup -->
+    <div class="form-popup" id="addSemesterForm">
+        <h2>Add Semester</h2>
+        <form id="semesterForm">
+            <select id="departmentDropdownForSemester" required>
+                <option value="">Select Department</option>
+            </select>
+            <select id="semesterDropdownForSemester" required>
+                <option value="">Select Semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+            </select>
+            <div class="form-buttons">
+                <button type="submit">Add</button>
+                <button type="button" onclick="closeForm('addSemesterForm')">Close</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Add Subject Form Popup -->
+    <div class="form-popup" id="addSubjectForm">
+        <h2>Add Subject</h2>
+        <form id="subjectForm">
+            <select id="departmentDropdownForSubject" required>
+                <option value="">Select Department</option>
+            </select>
+            <select id="semesterDropdownForSubject" required>
                 <option value="">Select Semester</option>
                 <option value="1">Semester 1</option>
                 <option value="2">Semester 2</option>
@@ -127,8 +167,8 @@
             </select>
             <input type="text" id="subjectName" placeholder="Subject Name" required>
             <div class="form-buttons">
-                <button type="submit">Submit</button>
-                <button type="button" onclick="closeForm('addDepartmentForm')">Close</button>
+                <button type="submit">Add</button>
+                <button type="button" onclick="closeForm('addSubjectForm')">Close</button>
             </div>
         </form>
     </div>
@@ -146,7 +186,7 @@
                 <!-- Options will be populated dynamically -->
             </select>
             <div class="form-buttons">
-                <button type="submit">Submit</button>
+                <button type="submit">Allocate</button>
                 <button type="button" onclick="closeForm('allocateSubjectForm')">Close</button>
             </div>
         </form>
@@ -159,7 +199,7 @@
             <input type="text" id="studentEnrollment" placeholder="Student Enrollment Number" required>
             <input type="password" id="studentPassword" placeholder="Password" required>
             <div class="form-buttons">
-                <button type="submit">Register</button>
+                <button type="submit">Add</button>
                 <button type="button" onclick="closeForm('addStudentForm')">Close</button>
             </div>
         </form>
@@ -172,130 +212,61 @@
             <input type="text" id="teacherName" placeholder="Teacher Name" required>
             <input type="password" id="teacherPassword" placeholder="Password" required>
             <div class="form-buttons">
-                <button type="submit">Register</button>
+                <button type="submit">Add</button>
                 <button type="button" onclick="closeForm('addTeacherForm')">Close</button>
             </div>
         </form>
     </div>
 
     <script>
+        // Function to close all open forms
+        function closeAllForms() {
+            const forms = document.querySelectorAll('.form-popup');
+            forms.forEach(form => {
+                form.style.display = 'none';
+            });
+        }
+
+        // Function to open the Add Department form
         function openAddDepartmentForm() {
+            closeAllForms(); // Close all other forms
             document.getElementById("addDepartmentForm").style.display = "block";
         }
 
-        function openAllocateSubjectForm() {
-            document.getElementById("allocateSubjectForm").style.display = "block";
-            fetchTeachers();
-            fetchSubjects();
+        // Function to open the Add Semester form
+        function openAddSemesterForm() {
+            closeAllForms(); // Close all other forms
+            document.getElementById("addSemesterForm").style.display = "block";
         }
 
+        // Function to open the Add Subject form
+        function openAddSubjectForm() {
+            closeAllForms(); // Close all other forms
+            document.getElementById("addSubjectForm").style.display = "block";
+        }
+
+        // Function to open the Allocate Subject form
+        function openAllocateSubjectForm() {
+            closeAllForms(); // Close all other forms
+            document.getElementById("allocateSubjectForm").style.display = "block";
+        }
+
+        // Function to open the Add Student form
         function openAddStudentForm() {
+            closeAllForms(); // Close all other forms
             document.getElementById("addStudentForm").style.display = "block";
         }
 
+        // Function to open the Add Teacher form
         function openAddTeacherForm() {
+            closeAllForms(); // Close all other forms
             document.getElementById("addTeacherForm").style.display = "block";
         }
 
+        // Function to close a specific form
         function closeForm(formId) {
             document.getElementById(formId).style.display = "none";
         }
-
-        function fetchTeachers() {
-            fetch('/get-teachers')
-                .then(response => response.json())
-                .then(data => {
-                    const teacherDropdown = document.getElementById('teacherDropdown');
-                    teacherDropdown.innerHTML = '<option value="">Select Teacher</option>';
-                    data.teachers.forEach(teacher => {
-                        const option = document.createElement('option');
-                        option.value = teacher.id;
-                        option.textContent = teacher.name;
-                        teacherDropdown.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching teachers:', error));
-        }
-
-        function fetchSubjects() {
-            fetch('/get-subjects')
-                .then(response => response.json())
-                .then(data => {
-                    const subjectDropdown = document.getElementById('subjectDropdown');
-                    subjectDropdown.innerHTML = '<option value="">Select Subject</option>';
-                    data.subjects.forEach(subject => {
-                        const option = document.createElement('option');
-                        option.value = subject.id;
-                        option.textContent = subject.name;
-                        subjectDropdown.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching subjects:', error));
-        }
-
-        document.getElementById('allocateForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            let teacherId = document.getElementById('teacherDropdown').value;
-            let subjectId = document.getElementById('subjectDropdown').value;
-
-            // Execute the query to allocate subject to teacher
-            fetch('/allocate-subject', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    teacherId: teacherId,
-                    subjectId: subjectId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Subject allocated successfully!');
-                    closeForm('allocateSubjectForm');
-                } else {
-                    alert('Error allocating subject.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error allocating subject.');
-            });
-        });
-
-        document.getElementById('teacherForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            let teacherName = document.getElementById('teacherName').value;
-            let teacherPassword = document.getElementById('teacherPassword').value;
-
-            // Execute the query to add teacher to the database
-            fetch('/add-teacher', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: teacherName,
-                    password: teacherPassword
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Teacher added successfully!');
-                    closeForm('addTeacherForm');
-                } else {
-                    alert('Error adding teacher.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error adding teacher.');
-            });
-        });
     </script>
 
 </body>

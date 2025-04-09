@@ -100,6 +100,7 @@
         <button onclick="openAllocateSubjectForm()">Allocate Subject</button>
         <button onclick="openAddStudentForm()">Add Student</button>
         <button onclick="openAddTeacherForm()">Add Teacher</button>
+        <button onclick="openUploadStudentDataForm()">Upload Student Data</button>
     </div>
 
     <!-- Hero Section -->
@@ -218,6 +219,18 @@
         </form>
     </div>
 
+    <!-- Upload Student Data Form Popup -->
+    <div class="form-popup" id="uploadStudentDataForm">
+        <h2>Upload Student Data</h2>
+        <form id="uploadStudentForm" enctype="multipart/form-data">
+            <input type="file" id="studentDataFile" accept=".xlsx" required>
+            <div class="form-buttons">
+                <button type="submit">Upload</button>
+                <button type="button" onclick="closeForm('uploadStudentDataForm')">Close</button>
+            </div>
+        </form>
+    </div>
+
     <script>
         // Function to close all open forms
         function closeAllForms() {
@@ -263,10 +276,51 @@
             document.getElementById("addTeacherForm").style.display = "block";
         }
 
+        // Function to open the Upload Student Data form
+        function openUploadStudentDataForm() {
+            closeAllForms(); // Close all other forms
+            document.getElementById("uploadStudentDataForm").style.display = "block";
+        }
+
         // Function to close a specific form
         function closeForm(formId) {
             document.getElementById(formId).style.display = "none";
         }
+
+        // Function to handle the form submission
+        document.getElementById('uploadStudentForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const fileInput = document.getElementById('studentDataFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('studentData', file);
+
+            // Simulate file upload (replace with actual API endpoint)
+            fetch('/upload-student-data', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('File uploaded successfully!');
+                    closeForm('uploadStudentDataForm');
+                } else {
+                    alert('Error uploading file.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error uploading file.');
+            });
+        });
     </script>
 
 </body>

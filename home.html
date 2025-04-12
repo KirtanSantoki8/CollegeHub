@@ -10,17 +10,8 @@
 
     <!-- Top Navigation Menu -->
     <nav class="navbar">
-        <ul class="nav-links">
-            <li class="nav-item">Information Technology</li>
-            <li class="nav-item dropdown">
-                <a href="#">Computer Engineering</a>
-                <ul class="dropdown-menu" id="computer-engineering-menu">
-                    <li><a href="subject-details.html">Subject 1</a></li>
-                    <li><a href="subject-details.html">Subject 2</a></li>
-                    <!-- Add more subjects as needed -->
-                </ul>
-            </li>
-            <li class="nav-item">Artificial Intelligence</li>
+        <ul class="nav-links" id="user-department-menu">
+            <!-- User's assigned department will be dynamically populated here -->
         </ul>
     </nav>
 
@@ -32,7 +23,26 @@
         </div>
     </section>
 
-    <script src="script.js"></script>
+    <script>
+        // Function to fetch and display the user's assigned department
+        function fetchUserAssignedDepartment() {
+            const data = {
+                "departmentName": "Information Technology"
+            };
+
+            const departmentMenu = document.getElementById('user-department-menu');
+            departmentMenu.innerHTML = ''; // Clear existing menu items
+
+            // Add the user's assigned department to the menu
+            const departmentItem = document.createElement('li');
+            departmentItem.className = 'nav-item';
+            departmentItem.textContent = data.departmentName; // Use the department name from the response
+            departmentMenu.appendChild(departmentItem);
+        }
+
+        // Call the function to fetch and display the department
+        fetchUserAssignedDepartment();
+    </script>
 
 </body>
 </html>

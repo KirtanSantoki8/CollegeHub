@@ -197,6 +197,10 @@
     <div class="form-popup" id="addStudentForm">
         <h2>Add Student</h2>
         <form id="studentForm">
+            <select id="departmentDropdownForStudent" required>
+                <option value="">Select Department</option>
+                <!-- Options will be populated dynamically -->
+            </select>
             <input type="text" id="studentEnrollment" placeholder="Student Enrollment Number" required>
             <input type="password" id="studentPassword" placeholder="Password" required>
             <div class="form-buttons">
@@ -268,6 +272,24 @@
         function openAddStudentForm() {
             closeAllForms(); // Close all other forms
             document.getElementById("addStudentForm").style.display = "block";
+            fetchDepartmentsForStudent(); // Fetch department list when the form is opened
+        }
+
+        // Function to fetch department list for the dropdown
+        function fetchDepartmentsForStudent() {
+            fetch('/get-departments') // Replace with your actual API endpoint
+                .then(response => response.json())
+                .then(data => {
+                    const departmentDropdown = document.getElementById('departmentDropdownForStudent');
+                    departmentDropdown.innerHTML = '<option value="">Select Department</option>'; // Reset options
+                    data.departments.forEach(department => {
+                        const option = document.createElement('option');
+                        option.value = department.id; // Use department ID as the value
+                        option.textContent = department.name; // Display department name
+                        departmentDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching departments:', error));
         }
 
         // Function to open the Add Teacher form
@@ -325,3 +347,4 @@
 
 </body>
 </html>
+``` 
